@@ -1,0 +1,66 @@
+
+@{
+    var grid = Html.DevExpress().GridView(settings =>
+    {
+        settings.Name = "GridView1";
+        settings.CallbackRouteValues = new
+        {
+            Controller = "Default",
+            Action = "GridView1Partial" };
+
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "Default", Action = "GridView1PartialAddNew" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "Default", Action = "GridView1PartialUpdate" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "Default", Action = "GridView1PartialDelete" };
+        settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
+        settings.SettingsBehavior.ConfirmDelete = true;
+
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowNewButton = true;
+        settings.CommandColumn.ShowDeleteButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+
+        settings.KeyFieldName = "Id";
+
+        settings.SettingsPager.Visible = true;
+        settings.Settings.ShowGroupPanel = true;
+        settings.Settings.ShowFilterRow = true;
+        settings.SettingsBehavior.AllowSelectByRowClick = true;
+
+        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.Off;
+        settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
+        settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
+        settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
+        settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
+
+
+        settings.Columns.Add(column => {
+            column.FieldName = ("GrupId");
+            column.Caption = "Grubu";
+            column.GroupBy();
+            column.ColumnType = MVCxGridViewColumnType.ComboBox;
+            var comboBoxProperties = column.PropertiesEdit as ComboBoxProperties;
+            comboBoxProperties.DataSource = Model;
+            comboBoxProperties.TextField = "Gruplar.GrupAdi";
+            comboBoxProperties.ValueField = ("Gruplar.Id");
+            //comboBoxProperties.ValueType = typeof(string);
+            comboBoxProperties.DropDownStyle = DropDownStyle.DropDown;
+            
+        });
+
+        
+        settings.Columns.Add("Adi");
+        settings.Columns.Add("Soyadi");
+        settings.Columns.Add("Unvani");
+        settings.Columns.Add("FirmaUnvani");
+        settings.Columns.Add("IsTel");
+        settings.Columns.Add("Cep");
+        settings.Columns.Add("Fax");
+        settings.Columns.Add("Adres");
+        settings.Columns.Add("Il");
+        settings.Columns.Add("Ilce");
+    });
+    if (ViewData["EditError"] != null){
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()
